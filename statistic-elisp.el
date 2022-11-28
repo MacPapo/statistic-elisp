@@ -130,12 +130,18 @@ n-> numero di elementi"
 
 (defun uno-meno-distribuzione-ipergeometrica(n k ke ne)
   "ALMENO"
+  
+  (interactive
+   "nDammi il numero di elementi: \nnDammi il numero di casi positivi: \nnQuanti casi positivi devono essere estratti almeno: \nnDammi il numero di estrazioni: ")
   (let ((res (- 1 (distribuzione-ipergeometrica n k (- 1 ke) ne))))
     (message "Result: %.7f" res)
     res))
 
 (defun ripartizione-ipergeometrica (n k ke ne)
   "non piu'"
+  
+  (interactive
+   "nDammi il numero di elementi: \nnDammi il numero di casi positivi: \nnQuanti casi positivi devono essere estratti al massimo?: \nnDammi il numero di estrazioni: ")
   (if (< ke 0)
       0
     (let ((res (+ (distribuzione-ipergeometrica n k ke ne)
@@ -167,7 +173,14 @@ p ∈ (0, 1)"
     res))
 
 (defun ripartizione-binomiale (n k prob)
-  "RISCRIVIMI"
+  "estrazione con reinserimento di palline che possono assumere 
+solo due valore ( 0 o 1)
+
+Supponiamo di avere n prove bernuolliane indipendenti tra loro e
+ ognuna con una probabilità di successo di p.
+Sia X la v,a, che descrive il numero totale di successi su n prove, 
+la funzione di ripartizione ( n k prob ) calcola la probabilità che al
+ più k elementi su n campionati abbiano avuto successo"
   (interactive
    "nDammi il numero di eventi: \nnDammi il numero di successi: \nnDammi la probabilità: ")
   (if (< k 0)
@@ -178,7 +191,15 @@ p ∈ (0, 1)"
       res)))
 
 (defun uno-meno-ripartizione-binomiale (n k prob)
-  "RISCRIVIMI"
+  "Estrazione con reinserimento di palline che possono assumere 
+solo due valore ( 0 o 1)
+
+Supponiamo di avere n prove bernuolliane indipendenti tra loro e
+ ognuna con una probabilità di successo di p.
+Sia X la v,a, che descrive il numero totale di successi su n prove, 
+la funzione di uno-meno-ripartizione-ripartizione ( n k prob ) 
+calcola la probabilità che almeno k elementi su n campionati 
+abbiano avuto successo"
   (interactive
    "nDammi il numero di eventi: \nnDammi il numero di successi: \nnDammi la probabilità: ")
   (let ((res (- 1 (ripartizione-binomiale n (- k 1) prob))))
@@ -186,7 +207,11 @@ p ∈ (0, 1)"
     res))
 
 (defun approssimazione-distribuzione-binomiale-poisson (n k prob)
-  "n -> eventi favorevoli
+  "Quando il numero di eventi tende and infinito e la probabilità di 
+di ognuno di essi tende a zero, si può approssimare la suddetta 
+distribuzione Binomiale ad una distribuzione di Poisson.
+
+RICEVE: n -> eventi favorevoli
 k -> eventi totali
 prob -> probabilità"
   (interactive
@@ -197,7 +222,11 @@ prob -> probabilità"
     res))
 
 (defun approssimazione-ripartizione-binomiale-poisson (n k prob)
-  "n -> eventi favorevoli
+  "Quando il numero di eventi tende and infinito e la probabilità di 
+di ognuno di essi tende a zero, si può approssimare la suddetta 
+distribuzione Binomiale ad una distribuzione di Poisson.
+
+RICEVE: n -> eventi favorevoli
 k -> eventi totali
 prob -> probabilità"
   (interactive
@@ -210,7 +239,11 @@ prob -> probabilità"
 
 ;;;;;;;;;;;;;;;;;;;;; POISSON ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun distribuzione-poisson (k lamb)
-  "Riceve K -> numero di eventi per intervallo di tempo
+  "Questa distribuzione viene usata per esprimere la probabilità che 
+uno specifico numero di eventi accada in un dato intervallo di tempo, 
+sapendo che, mediamente, se ne verifica un numero LAMB.
+
+RICEVE: K -> numero di eventi per intervallo di tempo
 LAMB -> numero medio di eventi per intervallo di tempo"
   (interactive
    "nDammi il numero di eventi per intervallo di tempo: \nnDammi il numero medio di eventi per intervallo di tempo: ")
@@ -224,24 +257,36 @@ LAMB -> numero medio di eventi per intervallo di tempo"
   "Calc K -> numero di eventi per intervallo di tempo
 LAMB -> numero medio di eventi per intervallo di tempo"
   (interactive
-   "nGive x: \nnGive lamb: ")
+   "nDammi il numero di eventi per intervallo di tempo: \nnDammi il numero medio di eventi per intervallo di tempo: ")
   (if (< k 0)
       0
-    (let ((res (+ (dpois k lamb) 
-		  (ppois (- k 1) lamb))))
+    (let ((res (+ (distribuzione-poisson k lamb) 
+		  (ripartizione-poisson (- k 1) lamb))))
       (message "Result: %.7f" res)
       res)))
 
 (defun uno-meno-ripartizione-poisson (k lamb)
-  "Calc k LAMB."
+  "Data una v.a. X che segue l'andamento della distribuzione di 
+Poission, la funzione calcola la probabilità che il numero di eventi 
+favorevoli sia almeno di k.
+
+RICEVE: k -> numero di eventi favorevoli
+LAMB -> numero medio di eventi per intervallo di tempo"
+  
   (interactive
-   "nGive K: \nnGive lamb: ")
+   "nDammi il numero di eventi per intervallo di tempo: \nnDammi il numero medio di eventi per intervallo di tempo: ")
   (let ((res (- 1 (ripartizione-poisson (- k 1) lamb))))
     (message "Result: %.7f" res)
     res))
 
 (defun ripartizione-poisson-estremi-inclusi (n k lamb)
-  "RISCRIVIMI"
+  "Data una v.a. X che segue l'andamento della distribuzione di 
+Poission, la funzione calcola la probabilità che il numero di eventi 
+favorevoli sia compreso tra gli estremi anch'essi considerati.
+
+RICEVE: n -> estremo superiore
+k -> estremo inferiore
+LAMB -> numero medio di eventi per intervallo di tempo"
   (interactive
    "nDammi l'estremo superiore: \nnDammi l'estremo inferiore: \nnDammi la lambda: ")
   (let ((res (- (ripartizione-poisson n lamb)
@@ -267,7 +312,10 @@ LAMB -> numero medio di eventi per intervallo di tempo"
 
 ;;;;;;;;;;;;;; GEOMETRICA ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun distribuzione-geometrica (x prob)
-  "RISCRIVIMI"
+  "La distribuzione geometrica viene usata per esprimere il numero di 
+eventi x, ognuno con probabilità p, che devo analizzare prima di 
+avere un successo"
+  
   (interactive
    "nDammi il numero di eventi: \nnDammi la probabilità: ")
   (let ((res (* (expt (float (- 1 prob)) (- x 1))
@@ -291,7 +339,8 @@ LAMB -> numero medio di eventi per intervallo di tempo"
       res)))
 
 (defun ripartizione-geometrica (x prob)
-  "RISCRIVIMI"
+  "questa funzione mi fornisce la probabilità che io debba aspettare 
+al più x eventi ,con probabilità p, prima di avere un successo"
   (interactive
    "nDammi il numero di eventi: \nnDammi la probabilità: ")
   (let ((res (ip--ripartizione-geometrica (- x 1) prob)))
@@ -299,7 +348,8 @@ LAMB -> numero medio di eventi per intervallo di tempo"
     res))
 
 (defun uno-meno-ripartizione-geometrica (x prob)
-  "RISCRIVIMI"
+  "questa funzione mi fornisce la probabilità che io debba aspettare 
+almeno x eventi ,con probabilità p, prima di avere un successo"
   (interactive
    "nDammi il numero di eventi: \nnDammi la probabilità: ")
   (let ((res (- 1 (ripartizione-geometrica (- x 1) prob))))
