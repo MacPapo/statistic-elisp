@@ -74,8 +74,32 @@
     (message "Result: %.7f" res)
     res))
 
+;;; Distribuzione
+
+(defun dipergeom (n k ne)
+  "Sia X la variabile aleatoria che conta il numero di successi su
+n estrazioni senza reinserimento da una popolazione con N
+elementi dei quali K sono considerati successo. Si dice allora
+che X ha una distribuzione ipergeometrica di parametri N, K e NE"
+
+  (interactive
+   "nGive me N value: \nnGive me K value: \nnGive me n value: ")
+  
+  (let* ((ke (max 0 (- ne (- n k))))
+	 (res (/ (* (combo-no-rip k ke)
+		    (combo-no-rip (- n k) (- ne ke)))
+		 (combo-no-rip n ne))))
+    (message "Result: %.7f" res)
+    res))
+
 (defun dbinom (x size prob)
-  "Calculate the binom distribution of X with SIZE and PROB."
+  "Calculate the binom distribution of X with SIZE and PROB.
+
+Supponiamo di eseguire n prove bernoulliane indipendenti, ognuna
+con probabilità di successo p. Sia X la variabile aleatoria che
+conta il numero totale di successi ottenuti nelle n prove. Si
+dice allora che X ha una distribuzione binomiale di parametri n e
+p ∈ (0, 1)"
   (interactive
    "nGive me x value: \nnGive me the size: \nnGive me the probability: ")
   (let* ((bin (combo-no-rip size x))
