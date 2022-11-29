@@ -314,7 +314,10 @@ LAMB -> numero medio di eventi per intervallo di tempo"
 (defun distribuzione-geometrica (x prob)
   "La distribuzione geometrica viene usata per esprimere il numero di 
 eventi x, ognuno con probabilità p, che devo analizzare prima di 
-avere un successo"
+avere un successo
+
+RICEVE: x -> numero di eventi
+prob -> probabilità di ogni evento di avere successo"
   
   (interactive
    "nDammi il numero di eventi: \nnDammi la probabilità: ")
@@ -340,7 +343,10 @@ avere un successo"
 
 (defun ripartizione-geometrica (x prob)
   "questa funzione mi fornisce la probabilità che io debba aspettare 
-al più x eventi ,con probabilità p, prima di avere un successo"
+al più x eventi ,con probabilità p, prima di avere un successo
+
+RICEVE: x -> numero di eventi
+prob -> probabilità di ogni evento di avere successo"
   (interactive
    "nDammi il numero di eventi: \nnDammi la probabilità: ")
   (let ((res (ip--ripartizione-geometrica (- x 1) prob)))
@@ -349,10 +355,28 @@ al più x eventi ,con probabilità p, prima di avere un successo"
 
 (defun uno-meno-ripartizione-geometrica (x prob)
   "questa funzione mi fornisce la probabilità che io debba aspettare 
-almeno x eventi ,con probabilità p, prima di avere un successo"
+almeno x eventi ,con probabilità p, prima di avere un successo
+
+RICEVE: x -> numero di eventi
+prob -> probabilità di ogni evento di avere successo"
   (interactive
    "nDammi il numero di eventi: \nnDammi la probabilità: ")
   (let ((res (- 1 (ripartizione-geometrica (- x 1) prob))))
+    (message "Result: %.7f" res)
+    res))
+
+(defun problema-mancanza-di-memoria (m n prob)
+  "questa funzione ci permetti di analizzare la probabilità di 
+riscontrare un successo dopo aver analizzato n eventi dopo i primi m 
+senza successi
+
+RICEVE: m -> numero di eventi già analizzati
+n -> numero di eventi da analizzare
+prob -> probabilità di successo di ogni evento"
+  
+  (interactive
+   "nDammi il numero di eventi già analizzati: \nnDammi il numero di eventi da analizzare: \nnDammi la probabilità: ")
+  (let ((res (/ (uno-meno-ripartizione-geometrica (+ m n) prob) (uno-meno-ripartizione-geometrica m prob))))
     (message "Result: %.7f" res)
     res))
 
